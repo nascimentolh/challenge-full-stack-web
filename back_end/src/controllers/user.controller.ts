@@ -3,12 +3,12 @@ import apiResponse from '../utils/apiResponse';
 
 import httpStatusCodes from 'http-status-codes';
 import IController from 'IController';
+import { sanitizeUser } from '../utils/api';
 
 const create: IController = async (req, res) => {
   let user;
   try {
-    console.log(req.body);
-    user = await userService.createUser(req.body);
+    user = sanitizeUser(await userService.createUser(req.body));
   } catch (error) {
     console.log(error);
   }

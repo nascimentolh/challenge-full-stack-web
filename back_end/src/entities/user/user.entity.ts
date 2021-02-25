@@ -1,10 +1,12 @@
 import {
   Column,
   Entity,
+  OneToOne,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-import { TimesTampsEntity } from './base/timestampsEntity';
+import { TimesTampsEntity } from '../base/timestampsEntity';
+import { Student } from './student.entity';
 
 @Entity('users')
 export class User extends TimesTampsEntity {
@@ -29,4 +31,7 @@ export class User extends TimesTampsEntity {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @OneToOne(() => Student, (student) => student.user)
+  student: Student;
 }
