@@ -1,15 +1,20 @@
-import config from "config";
-
-export default {
-  type: "postgres",
-  host: config.get("App.database.host"),
-  port: config.get("App.database.port"),
-  username: config.get("App.database.username"),
-  password: config.get("App.database.password"),
-  database: config.get("App.database.name"),
-  entities: ["./src/modules/**/entities/*.ts"],
-  migrations: ["./src/shared/infra/typeorm/migrations/*.ts"],
+module.exports = {
+  type: 'postgres',
+  host: process.env.DB_HOST || '127.0.0.1',
+  username: process.env.DB_USER || 'postgres',
+  password: process.env.DB_PASSWORD || 'docker',
+  database: process.env.DB_NAME || 'dev_grupoa',
+  charset: 'utf8',
+  synchronize: process.env.NODE_ENV !== 'production',
+  entities: [
+    '**/**.entity.ts',
+    // '**/**.entity.js'
+  ],
+  logging: process.env.NODE_ENV !== 'production' ? 'all' : 'error',
+  migrations: ['migration/*.ts'],
   cli: {
-    migrationsDir: "./src/shared/infra/typeorm/migrations",
+    migrationsDir: 'migration',
   },
+  connectTimeout: 30000,
+  acquireTimeout: 30000,
 };
