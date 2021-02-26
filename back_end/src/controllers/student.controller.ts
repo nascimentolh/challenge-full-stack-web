@@ -18,6 +18,11 @@ const create: IController = async (req, res) => {
   }
 };
 
+const getStudents: IController = async (req, res) => {
+  const students = await studentService.getStudents();
+  apiResponse.result(res, students, httpStatusCodes.OK);
+};
+
 const getStudentByCpf: IController = async (req, res) => {
   const student = await studentService.getStudentByCpf(req.params.cpf);
   apiResponse.result(res, student, httpStatusCodes.OK);
@@ -31,6 +36,7 @@ const getStudentByRA: IController = async (req, res) => {
 
 export default {
   create,
+  getStudents,
   getStudentByCpf,
   getStudentByRA,
 };

@@ -3,8 +3,18 @@ import { Student } from '../entities/user/student.entity';
 import { IStudentCreateDTO } from './interfaces/IStudentsService';
 import userService from './user.service';
 import { sanitizeStudent } from '../utils/api';
-import { generatePass } from '../utils/crypto';
-import { User } from '../entities/user/user.entity';
+
+const getStudents = async () => {
+  try {
+    return await getRepository(Student)
+      .createQueryBuilder('student')
+      .select(['student', 'user.name'])
+      .leftJoin('student.user', 'user')
+      .getMany();
+  } catch (error) {
+    return null;
+  }
+};
 
 const getStudentByRA = async (studentRA: number) => {
   try {
@@ -26,23 +36,24 @@ const getStudentByCpf = async (studentCPF: string) => {
 
 const createStudent = async (data: IStudentCreateDTO) => {
   const password = data.cpf.slice(0, 6);
+
+  const user = await userService.create({
+    email: data.email,
+    name: data.name,
+    password,
+  });
+
   const newStudent = new Student();
   newStudent.cpf = data.cpf;
   newStudent.ra = data.ra;
-  const student = await getRepository(Student).save(newStudent);
+  newStudent.user = user;
 
-  const newUser = new User();
-  newUser.email = data.email;
-  newUser.password = await generatePass(password);
-  newUser.name = data.name;
-  newUser.student = student;
-  await getRepository(User).save(newUser);
-
-  return sanitizeStudent(student);
+  return sanitizeStudent(await getRepository(Student).save(newStudent));
 };
 
 export default {
+  createStudent,
+  getStudents,
   getStudentByCpf,
   getStudentByRA,
-  createStudent,
 };
