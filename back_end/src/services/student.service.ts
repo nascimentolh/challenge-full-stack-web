@@ -8,9 +8,9 @@ const getStudents = async () => {
   try {
     return await getRepository(Student)
       .createQueryBuilder('student')
-      .select(['student', 'user.name'])
+      .select(['student', 'user.name', 'user.email', 'user.id'])
       .leftJoin('student.user', 'user')
-      .getMany();
+      .paginate();
   } catch (error) {
     return null;
   }
