@@ -1,8 +1,8 @@
 <template>
-  <v-container fluid grid-list-xl>
+  <v-container fluid>
     <v-card class="mt-6">
       <v-form v-model="valid">
-        <v-container>
+        <v-container fluid>
           <v-row>
             <v-col cols="12" lg="9" md="12">
               <v-text-field
@@ -22,6 +22,7 @@
                 :error-messages="cpfErrors"
                 :counter="11"
                 label="CPF"
+                :disabled="mode === 'edit'"
                 @input="$v.student.cpf.$touch()"
                 @blur="$v.student.cpf.$touch()"
                 required
@@ -33,6 +34,7 @@
                 v-model="student.ra"
                 :error-messages="raErrors"
                 label="RA"
+                :disabled="mode === 'edit'"
                 @input="$v.student.ra.$touch()"
                 @blur="$v.student.ra.$touch()"
                 required
@@ -49,7 +51,11 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <v-btn color="primary" elevation="2" outlined v-if="mode === 'save'"
+          <v-btn
+            color="primary"
+            elevation="2"
+            outlined
+            v-if="mode === 'save' || mode === 'edit'"
             >Salvar</v-btn
           >
           <v-btn elevation="2" color="error" outlined v-if="mode === 'remove'"
@@ -61,6 +67,26 @@
         </v-container>
       </v-form>
     </v-card>
+    <dir>
+      <v-data-table
+        :headers="headers"
+        :items="students"
+        :options.sync="options"
+        :server-items-length="totalStudents"
+        :loading="loading"
+        class="elevation-1 mt-6"
+      >
+        <template v-slot:item.actions="{ item }">
+          <v-icon small class="mr-2" @click="loadStudent(item, 'edit')">
+            mdi-pencil
+          </v-icon>
+          <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        </template>
+        <template v-slot:no-data>
+          <v-btn color="primary" @click="initialize"> Reset </v-btn>
+        </template>
+      </v-data-table>
+    </dir>
   </v-container>
 </template>
 
@@ -140,12 +166,42 @@ export default {
       },
     },
   },
-
   data: () => ({
     mode: "save",
     valid: false,
     student: {},
+    totalStudents: 0,
+    students: [],
+    loading: true,
+    options: {},
+    headers: [
+      {
+        text: "RA",
+        align: "start",
+        value: "ra",
+      },
+      {
+        text: "Nome",
+        value: "user.name",
+      },
+      {
+        text: "CPF",
+        value: "cpf",
+      },
+      { text: "Actions", value: "actions", sortable: false },
+    ],
   }),
+  watch: {
+    options: {
+      handler() {
+        this.loadStudents();
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.loadStudents();
+  },
   computed: {
     cpfErrors() {
       const errors = [];
@@ -178,6 +234,47 @@ export default {
       !this.$v.student.ra.required && errors.push("RA é requerido");
       !this.$v.student.ra.raIsUnique && errors.push("RA está em uso");
       return errors;
+    },
+  },
+  methods: {
+    loadStudents() {
+      this.loading = true;
+      const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+      axios
+        .get("/students", {
+          params: { page, per_page: itemsPerPage },
+        })
+        .then((res) => {
+          if (sortBy.length === 1 && sortDesc.length === 1) {
+            this.students = res.data.data.data.sort((a, b) => {
+              const sortA = a[sortBy[0]];
+              const sortB = b[sortBy[0]];
+
+              if (sortDesc[0]) {
+                if (sortA < sortB) return 1;
+                if (sortA > sortB) return -1;
+                return 0;
+              } else {
+                if (sortA < sortB) return -1;
+                if (sortA > sortB) return 1;
+                return 0;
+              }
+            });
+          } else {
+            this.students = res.data.data.data;
+          }
+          this.totalStudents = res.data.total;
+          this.loading = false;
+        });
+    },
+    loadStudent(student, mode = "save") {
+      this.mode = mode;
+      this.student = {
+        name: student.user.name,
+        email: student.user.email,
+        ra: student.ra,
+        cpf: student.cpf,
+      };
     },
   },
 };
