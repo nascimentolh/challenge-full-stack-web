@@ -8,7 +8,7 @@ import { sanitizeUser } from '../utils/api';
 const create: IController = async (req, res) => {
   let user;
   try {
-    user = sanitizeUser(await userService.createUser(req.body));
+    user = sanitizeUser(await userService.create(req.body));
   } catch (error) {
     console.log(error);
   }
@@ -24,6 +24,12 @@ const create: IController = async (req, res) => {
   }
 };
 
+const getUserByEmail: IController = async (req, res) => {
+  const user = await userService.getUserByEmail(req.params.email);
+  apiResponse.result(res, user, httpStatusCodes.OK);
+};
+
 export default {
   create,
+  getUserByEmail,
 };

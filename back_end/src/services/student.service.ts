@@ -8,9 +8,7 @@ import { User } from '../entities/user/user.entity';
 
 const getStudentByRA = async (studentRA: number) => {
   try {
-    return sanitizeStudent(
-      await getRepository(Student).findOne({ ra: studentRA }),
-    );
+    return await getRepository(Student).findOne({ ra: studentRA });
   } catch (error) {
     return null;
   }
@@ -18,9 +16,9 @@ const getStudentByRA = async (studentRA: number) => {
 
 const getStudentByCpf = async (studentCPF: string) => {
   try {
-    return sanitizeStudent(
-      await getRepository(Student).findOne({ cpf: studentCPF }),
-    );
+    return await getRepository(Student).findOne({
+      cpf: studentCPF,
+    });
   } catch (error) {
     return null;
   }

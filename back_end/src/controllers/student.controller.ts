@@ -18,6 +18,19 @@ const create: IController = async (req, res) => {
   }
 };
 
+const getStudentByCpf: IController = async (req, res) => {
+  const student = await studentService.getStudentByCpf(req.params.cpf);
+  apiResponse.result(res, student, httpStatusCodes.OK);
+};
+
+const getStudentByRA: IController = async (req, res) => {
+  const { ra } = req.params;
+  const student = await studentService.getStudentByRA(parseInt(ra, 10));
+  apiResponse.result(res, student, httpStatusCodes.OK);
+};
+
 export default {
   create,
+  getStudentByCpf,
+  getStudentByRA,
 };
