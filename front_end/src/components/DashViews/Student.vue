@@ -67,6 +67,8 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required, maxLength, integer, email } from "vuelidate/lib/validators";
+import axios from "axios";
+
 export default {
   mixins: [validationMixin],
 
@@ -95,20 +97,52 @@ export default {
           if (rest != parseInt(value.substring(10, 11))) return false;
           return true;
         },
+        async cpfIsUnique(value) {
+          if (value.length == 11) {
+            try {
+              const { data } = await axios.get(`students/${value}/cpf`);
+              if (data.data == null) return true;
+
+              return false;
+            } catch (error) {
+              console.log(error);
+            }
+          }
+        },
       },
       ra: {
         required,
         integer,
+        async raIsUnique(value) {
+          try {
+            const { data } = await axios.get(`students/${value}/ra`);
+            if (data.data == undefined) return true;
+
+            return false;
+          } catch (error) {
+            console.log(error);
+          }
+        },
       },
       email: {
         required,
         email,
+        async emailIsUnique(value) {
+          try {
+            const { data } = await axios.get(`users/${value}/email`);
+            if (data.data == undefined) return true;
+
+            return false;
+          } catch (error) {
+            console.log(error);
+          }
+        },
       },
     },
   },
 
   data: () => ({
-    mode: "remove",
+    mode: "save",
     valid: false,
     student: {},
   }),
@@ -118,7 +152,7 @@ export default {
       if (!this.$v.student.cpf.$dirty) return errors;
       !this.$v.student.cpf.required && errors.push("CPF é requerido");
       !this.$v.student.cpf.cpfValid && errors.push("CPF é inválido");
-
+      !this.$v.student.cpf.cpfIsUnique && errors.push("CPF está em uso");
       return errors;
     },
     emailErrors() {
@@ -142,6 +176,7 @@ export default {
       if (!this.$v.student.ra.$dirty) return errors;
       !this.$v.student.ra.integer && errors.push("RA deve ser inteiro");
       !this.$v.student.ra.required && errors.push("RA é requerido");
+      !this.$v.student.ra.raIsUnique && errors.push("RA está em uso");
       return errors;
     },
   },
