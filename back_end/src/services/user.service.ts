@@ -1,8 +1,13 @@
 import { User } from '../entities/user/user.entity';
-import { IUserCreateDTO } from './interfaces/IUsersService';
+import {
+  IUserCreateDTO,
+  IUserUpdateByStudentDTO,
+} from './interfaces/IUsersService';
 import { generatePass } from '../utils/crypto';
 import { sanitizeUser } from '../utils/api';
-import { getRepository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
+
+const repo: Repository<User> = getRepository(User);
 
 const create = async (data: IUserCreateDTO) => {
   const newUser = new User();
@@ -10,18 +15,32 @@ const create = async (data: IUserCreateDTO) => {
   newUser.password = await generatePass(data.password);
   newUser.name = data.name;
 
-  return await getRepository(User).save(newUser);
+  return await repo.save(newUser);
 };
 
 const getUserByEmail = async (email: string) => {
   try {
-    return sanitizeUser(await getRepository(User).findOne({ email }));
+    return sanitizeUser(await repo.findOne({ email }));
   } catch (error) {
     return null;
   }
 };
 
+const updateByStudent = async (
+  id: number,
+  data: IUserUpdateByStudentDTO,
+) => {
+  let user = await repo.findOne({ id });
+  if (user) {
+    user.name = data.name;
+    user.email = data.email;
+    return await repo.save(user);
+  }
+  return null;
+};
+
 export default {
   create,
   getUserByEmail,
+  updateByStudent,
 };

@@ -29,7 +29,26 @@ const getUserByEmail: IController = async (req, res) => {
   apiResponse.result(res, user, httpStatusCodes.OK);
 };
 
+const updateByStudent: IController = async (req, res) => {
+  let user;
+  try {
+    user = sanitizeUser(
+      await userService.updateByStudent(
+        parseInt(req.params.id, 10),
+        req.body,
+      ),
+    );
+  } catch (error) {
+    return null;
+  }
+
+  if (user) {
+    apiResponse.result(res, user, httpStatusCodes.OK);
+  }
+};
+
 export default {
   create,
   getUserByEmail,
+  updateByStudent,
 };
