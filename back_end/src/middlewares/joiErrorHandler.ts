@@ -9,7 +9,6 @@ export default (
   next: NextFunction,
 ) => {
   if (err && err.type) {
-    console.log(err.error.details);
     const error = {
       code: HttpStatus.BAD_REQUEST,
       message: HttpStatus.getStatusText(HttpStatus.BAD_REQUEST),

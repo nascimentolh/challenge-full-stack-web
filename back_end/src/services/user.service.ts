@@ -37,8 +37,13 @@ const updateByStudent = async (
   return null;
 };
 
+const updateUser = async (user: User) => {
+  return await getRepository(User).save(user);
+};
+
 export default {
   create,
   getUserByEmail,
   updateByStudent,
+  updateUser,
 };
