@@ -2,6 +2,45 @@
   <v-navigation-drawer
     id="app-drawer"
     v-model="inputValue"
+    :mini-variant.sync="mini"
+    app
+    dark
+    class="red accent-4"
+    floating
+    mobile-break-point="791"
+    width="260"
+    height="100%"
+    absolute
+  >
+    <v-list-item class="px-2">
+      <v-list-item-avatar>
+        <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+      </v-list-item-avatar>
+
+      <v-list-item-title>John Leider</v-list-item-title>
+
+      <v-btn icon @click.stop="mini = !mini">
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
+    </v-list-item>
+
+    <v-divider></v-divider>
+
+    <v-list dense>
+      <v-list-item v-for="(link, i) in links" :key="i" link>
+        <v-list-item-icon>
+          <v-icon>{{ link.icon }}</v-icon>
+        </v-list-item-icon>
+
+        <v-list-item-content>
+          <v-list-item-title>{{ link.text }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+  </v-navigation-drawer>
+  <!-- <v-navigation-drawer
+    id="app-drawer"
+    v-model="inputValue"
     app
     dark
     class="red accent-4"
@@ -35,7 +74,7 @@
         </v-list-item>
       </v-layout>
     </v-img>
-  </v-navigation-drawer>
+  </v-navigation-drawer> -->
 </template>
 
 <script>
@@ -43,6 +82,8 @@
 import { mapMutations, mapState } from "vuex";
 export default {
   data: () => ({
+    mini: true,
+    drawer: true,
     logo: "https://ui-avatars.com/api/?name=John+Doe",
     links: [
       {
@@ -51,15 +92,15 @@ export default {
         text: "Dashboard",
       },
       {
-          to: "/students",
-          icon: "mdi-school",
-          text: "Estudantes"
+        to: "/students",
+        icon: "mdi-school",
+        text: "Estudantes",
       },
       {
-          to: "/users",
-          icon: "mdi-account",
-          text: "Usuários"
-      }
+        to: "/users",
+        icon: "mdi-account",
+        text: "Usuários",
+      },
     ],
     responsive: false,
   }),

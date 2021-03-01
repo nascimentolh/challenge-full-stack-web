@@ -1,6 +1,7 @@
 <template>
   <v-app-bar id="core-toolbar" app dark style="background: #424242" flat dense>
-    <div class="v-toolbar-title">
+    <v-app-bar-nav-icon v-if="responsive" @click.stop="onClickBtn"></v-app-bar-nav-icon>
+    <!-- <div class="v-toolbar-title">
       <v-toolbar-title class="font-weight-light white--text">
         <v-btn
           v-if="responsive"
@@ -38,7 +39,7 @@
 
         <v-icon class="toolbar-items" color>mdi-power</v-icon>
       </v-flex>
-    </v-toolbar-items>
+    </v-toolbar-items> -->
   </v-app-bar>
 </template>
 

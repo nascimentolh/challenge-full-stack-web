@@ -246,11 +246,13 @@ export default {
   },
   methods: {
     reset() {
+      this.$v.$reset();
       this.mode = "save";
       this.student = {};
       this.loadStudents();
     },
     save() {
+      this.$v.$touch();
       const method = this.mode == "edit" ? "put" : "post";
       const url =
         this.mode == "edit" ? `/users/${this.student.user_id}` : "/students";
