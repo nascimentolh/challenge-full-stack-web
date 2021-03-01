@@ -43,6 +43,8 @@ const createStudent = async (data: IStudentCreateDTO) => {
     password,
   });
 
+  console.log(user);
+
   const newStudent = new Student();
   newStudent.cpf = data.cpf;
   newStudent.ra = data.ra;

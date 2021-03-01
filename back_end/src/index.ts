@@ -1,15 +1,17 @@
-import { createConnection } from "typeorm";
-import app from "./config/express";
+import { createConnection } from 'typeorm';
+
+import logger from './config/logger';
+import app from './config/express';
 
 const PORT = process.env.PORT || 3000;
 
 createConnection()
   .then(() => {
-    console.log("Database connection successful");
+    logger.info('Database connection successful');
     app.listen(PORT, () => {
-      console.log(`Server running: ${PORT}`);
+      logger.info(`Server running: ${PORT}`);
     });
   })
   .catch((error: Error) => {
-    console.log(`Database connection failed: ${error}`);
+    logger.info(`Database connection failed: ${error}`);
   });

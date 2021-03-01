@@ -10,7 +10,7 @@ const create: IController = async (req, res) => {
   try {
     user = sanitizeUser(await userService.create(req.body));
   } catch (error) {
-    console.log(error);
+    return null;
   }
 
   if (user) {
