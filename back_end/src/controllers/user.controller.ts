@@ -41,9 +41,7 @@ const updateByStudent: IController = async (req, res) => {
         req.body,
       ),
     );
-  } catch (error) {
-    return null;
-  }
+  } catch (error) {}
 
   if (user) {
     apiResponse.result(res, user, httpStatusCodes.OK);

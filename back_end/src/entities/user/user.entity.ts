@@ -32,6 +32,6 @@ export class User extends TimesTampsEntity {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToOne(() => Student, (student) => student.user)
+  @OneToOne(() => Student, (student) => student.user, { cascade: true })
   student: Student;
 }
