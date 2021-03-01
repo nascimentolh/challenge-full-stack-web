@@ -16,6 +16,9 @@ const routes = [
       },
       {
         path: "/students",
+        meta: {
+          name: 'Estudantes',
+        },
         name: "Estudantes",
         component: () => import(`@/components/DashViews/Student.vue`)
       }

@@ -34,6 +34,7 @@
                 v-model="student.ra"
                 :error-messages="raErrors"
                 label="RA"
+                type="number"
                 :disabled="mode === 'edit'"
                 @input="$v.student.ra.$touch()"
                 @blur="$v.student.ra.$touch()"
@@ -56,12 +57,18 @@
             elevation="2"
             outlined
             v-if="mode === 'save' || mode === 'edit'"
+            @click="save()"
             >Salvar</v-btn
           >
           <v-btn elevation="2" color="error" outlined v-if="mode === 'remove'"
             >Delete</v-btn
           >
-          <v-btn elevation="2" color="secondary" outlined class="ml-2"
+          <v-btn
+            elevation="2"
+            color="secondary"
+            outlined
+            class="ml-2"
+            @click="reset()"
             >Cancelar</v-btn
           >
         </v-container>
@@ -93,6 +100,7 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required, maxLength, integer, email } from "vuelidate/lib/validators";
+import { showError } from "@/global";
 import axios from "axios";
 
 export default {
@@ -188,7 +196,7 @@ export default {
         text: "CPF",
         value: "cpf",
       },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "Ações", value: "actions", sortable: false },
     ],
   }),
   watch: {
@@ -237,6 +245,22 @@ export default {
     },
   },
   methods: {
+    reset() {
+      this.mode = "save";
+      this.student = {};
+      this.loadStudents();
+    },
+    save() {
+      const method = this.mode == "edit" ? "put" : "post";
+      const url =
+        this.mode == "edit" ? `/users/${this.student.user_id}` : "/students";
+      axios[method](url, this.student)
+        .then(() => {
+          this.$toasted.global.defaultSuccess();
+          this.reset();
+        })
+        .catch(showError);
+    },
     loadStudents() {
       this.loading = true;
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;
@@ -263,13 +287,15 @@ export default {
           } else {
             this.students = res.data.data.data;
           }
-          this.totalStudents = res.data.total;
+          this.totalStudents = res.data.data.total;
           this.loading = false;
         });
     },
     loadStudent(student, mode = "save") {
       this.mode = mode;
       this.student = {
+        id: student.id,
+        user_id: student.user.id,
         name: student.user.name,
         email: student.user.email,
         ra: student.ra,

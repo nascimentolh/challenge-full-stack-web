@@ -9,6 +9,7 @@ import { sync } from "vuex-router-sync";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import toasted from "./config/toasted";
 import axios from "axios";
 
 Vue.prototype.$http = axios;
@@ -22,6 +23,7 @@ sync(store, router);
 
 new Vue({
   vuetify,
+  toasted,
   router,
   store,
   render: (h) => h(App),
