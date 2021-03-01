@@ -8,7 +8,7 @@ const create: IController = async (req, res) => {
   try {
     student = await studentService.createStudent(req.body);
   } catch (error) {
-    return null;
+
   }
 
   if (student) {

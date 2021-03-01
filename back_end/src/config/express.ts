@@ -3,6 +3,8 @@ import * as dotenv from 'dotenv';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import application from '../constants/application';
+import joiErrorHandler from '../middlewares/joiErrorHandler';
+import * as errorHandler from '../middlewares/apiErrorHandler';
 import routes from '../routes';
 import { pagination } from 'typeorm-pagination';
 
@@ -14,5 +16,7 @@ app.use(pagination);
 app.use(bodyParser.json());
 
 app.use(application.url.base, routes);
+app.use(joiErrorHandler);
+app.use(errorHandler.notFoundErrorHandler);
 
 export default app;

@@ -5,9 +5,7 @@ import {
 } from './interfaces/IUsersService';
 import { generatePass } from '../utils/crypto';
 import { sanitizeUser } from '../utils/api';
-import { getRepository, Repository } from 'typeorm';
-
-const repo: Repository<User> = getRepository(User);
+import { getRepository } from 'typeorm';
 
 const create = async (data: IUserCreateDTO) => {
   const newUser = new User();
@@ -15,12 +13,12 @@ const create = async (data: IUserCreateDTO) => {
   newUser.password = await generatePass(data.password);
   newUser.name = data.name;
 
-  return await repo.save(newUser);
+  return await getRepository(User).save(newUser);
 };
 
 const getUserByEmail = async (email: string) => {
   try {
-    return sanitizeUser(await repo.findOne({ email }));
+    return sanitizeUser(await getRepository(User).findOne({ email }));
   } catch (error) {
     return null;
   }
@@ -30,11 +28,11 @@ const updateByStudent = async (
   id: number,
   data: IUserUpdateByStudentDTO,
 ) => {
-  let user = await repo.findOne({ id });
+  let user = await getRepository(User).findOne({ id });
   if (user) {
     user.name = data.name;
     user.email = data.email;
-    return await repo.save(user);
+    return await getRepository(User).save(user);
   }
   return null;
 };

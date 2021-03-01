@@ -4,14 +4,17 @@ import apiResponse from '../utils/apiResponse';
 import httpStatusCodes from 'http-status-codes';
 import IController from 'IController';
 import { sanitizeUser } from '../utils/api';
+import { ValidatedRequest } from 'express-joi-validation';
+import { ICreateUserSchema } from './interfaces/IUser';
 
-const create: IController = async (req, res) => {
+const create: IController = async (
+  req: ValidatedRequest<ICreateUserSchema>,
+  res,
+) => {
   let user;
   try {
     user = sanitizeUser(await userService.create(req.body));
-  } catch (error) {
-    return null;
-  }
+  } catch (error) {}
 
   if (user) {
     apiResponse.result(res, user, httpStatusCodes.OK);
