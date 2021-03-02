@@ -14,10 +14,10 @@
   >
     <v-list-item class="px-2">
       <v-list-item-avatar>
-        <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+        <v-img :src="logo"></v-img>
       </v-list-item-avatar>
 
-      <v-list-item-title>John Leider</v-list-item-title>
+      <v-list-item-title>{{ $store.getters.getUser.name }}</v-list-item-title>
 
       <v-btn icon @click.stop="mini = !mini">
         <v-icon>mdi-chevron-left</v-icon>
@@ -27,79 +27,45 @@
     <v-divider></v-divider>
 
     <v-list dense>
-      <v-list-item v-for="(link, i) in links" :key="i" link>
-        <v-list-item-icon>
+      <v-list-item
+        v-for="(link, i) in links"
+        :key="i"
+        :to="link.to"
+        :active-class="color"
+        avatar
+        class="v-list-item"
+      >
+        <v-list-item-action>
           <v-icon>{{ link.icon }}</v-icon>
-        </v-list-item-icon>
-
-        <v-list-item-content>
-          <v-list-item-title>{{ link.text }}</v-list-item-title>
-        </v-list-item-content>
+        </v-list-item-action>
+        <v-list-item-title v-text="link.text" />
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
-  <!-- <v-navigation-drawer
-    id="app-drawer"
-    v-model="inputValue"
-    app
-    dark
-    class="red accent-4"
-    floating
-    persistent
-    mobile-break-point="991"
-    width="260"
-    absolute
-  >
-    <v-img :src="image" height="100%">
-      <v-layout class="fill-height" column>
-        <v-list-item avatar>
-          <v-list-item-avatar color="grey">
-            <v-img :src="logo" height="64" contain />
-          </v-list-item-avatar>
-          <v-list-item-title class="title"> User </v-list-item-title>
-        </v-list-item>
-        <v-divider />
-        <v-list-item
-          v-for="(link, i) in links"
-          :key="i"
-          :to="link.to"
-          :active-class="color"
-          avatar
-          class="v-list-item"
-        >
-          <v-list-item-action>
-            <v-icon>{{ link.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-title v-text="link.text" />
-        </v-list-item>
-      </v-layout>
-    </v-img>
-  </v-navigation-drawer> -->
 </template>
 
 <script>
-// Utilities
 import { mapMutations, mapState } from "vuex";
+
 export default {
   data: () => ({
     mini: true,
     drawer: true,
-    logo: "https://ui-avatars.com/api/?name=John+Doe",
+    logo: `https://ui-avatars.com/api/?name=${localStorage.getItem(
+      "@GRUPOA_USER_NAME"
+    )}`,
     links: [
       {
-        to: "/dashboard",
-        icon: "mdi-view-dashboard",
-        text: "Dashboard",
-      },
-      {
-        to: "/students",
+        to: "/dashboard/students",
         icon: "mdi-school",
         text: "Estudantes",
+        can: "admin",
       },
       {
-        to: "/users",
+        to: "users",
         icon: "mdi-account",
         text: "Usuários",
+        can: "admin",
       },
     ],
     responsive: false,
@@ -114,13 +80,11 @@ export default {
         this.setDrawer(val);
       },
     },
-    items() {
-      return this.$t("Layout.View.items");
-    },
   },
   mounted() {
     this.onResponsiveInverted();
     window.addEventListener("resize", this.onResponsiveInverted);
+    this.linksFilter();
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.onResponsiveInverted);
@@ -133,6 +97,15 @@ export default {
       } else {
         this.responsive = false;
       }
+    },
+    linksFilter() {
+      this.links = this.links.filter((link) => {
+        if (link.can == "admin" ? this.$acl.check("isAdmin") : false) {
+          return link;
+        } else if (link.can == "public") {
+          return link;
+        }
+      });
     },
   },
 };

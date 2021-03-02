@@ -10,6 +10,7 @@
                 :error-messages="nameErrors"
                 :counter="70"
                 label="Nome"
+                :disabled="mode === 'remove'"
                 @input="$v.student.name.$touch()"
                 @blur="$v.student.name.$touch()"
                 required
@@ -22,7 +23,7 @@
                 :error-messages="cpfErrors"
                 :counter="11"
                 label="CPF"
-                :disabled="mode === 'edit'"
+                :disabled="mode === 'edit' || mode === 'remove'"
                 @input="$v.student.cpf.$touch()"
                 @blur="$v.student.cpf.$touch()"
                 required
@@ -35,7 +36,7 @@
                 :error-messages="raErrors"
                 label="RA"
                 type="number"
-                :disabled="mode === 'edit'"
+                :disabled="mode === 'edit' || mode === 'remove'"
                 @input="$v.student.ra.$touch()"
                 @blur="$v.student.ra.$touch()"
                 required
@@ -46,6 +47,7 @@
                 v-model="student.email"
                 :error-messages="emailErrors"
                 label="E-mail"
+                :disabled="mode === 'remove'"
                 @input="$v.student.email.$touch()"
                 @blur="$v.student.email.$touch()"
                 required
@@ -60,8 +62,13 @@
             @click="save()"
             >Salvar</v-btn
           >
-          <v-btn elevation="2" color="error" outlined v-if="mode === 'remove'"
-            >Delete</v-btn
+          <v-btn
+            elevation="2"
+            @click="deleteItem"
+            color="error"
+            outlined
+            v-if="mode === 'remove'"
+            >Deletar</v-btn
           >
           <v-btn
             elevation="2"
@@ -87,13 +94,29 @@
           <v-icon small class="mr-2" @click="loadStudent(item, 'edit')">
             mdi-pencil
           </v-icon>
-          <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-        </template>
-        <template v-slot:no-data>
-          <v-btn color="primary" @click="initialize"> Reset </v-btn>
+          <v-icon small @click="loadStudent(item, 'remove')">
+            mdi-delete
+          </v-icon>
         </template>
       </v-data-table>
     </dir>
+    <v-dialog v-model="dialogDelete" max-width="500px">
+      <v-card>
+        <v-card-title class="headline"
+          >Você tem certeza que quer deletar?</v-card-title
+        >
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="closeDelete"
+            >Cancelar</v-btn
+          >
+          <v-btn color="blue darken-1" text @click="deleteItemConfirm(student)"
+            >Sim</v-btn
+          >
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -175,6 +198,7 @@ export default {
     },
   },
   data: () => ({
+    dialogDelete: false,
     mode: "save",
     valid: false,
     student: {},
@@ -245,6 +269,22 @@ export default {
     },
   },
   methods: {
+    deleteItem() {
+      this.dialogDelete = true;
+    },
+    deleteItemConfirm(item) {
+      axios
+        .delete(`students/${item.id}`)
+        .then(() => {
+          this.closeDelete();
+          this.$toasted.global.defaultSuccess();
+          this.reset();
+        })
+        .catch(showError);
+    },
+    closeDelete() {
+      this.dialogDelete = false;
+    },
     reset() {
       this.$v.$reset();
       this.mode = "save";

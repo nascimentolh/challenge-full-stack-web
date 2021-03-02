@@ -1,16 +1,12 @@
 <template>
   <v-app-bar id="core-toolbar" app dark style="background: #424242" flat dense>
-    <v-app-bar-nav-icon v-if="responsive" @click.stop="onClickBtn"></v-app-bar-nav-icon>
-    <!-- <div class="v-toolbar-title">
+    <v-app-bar-nav-icon
+      v-if="responsive"
+      @click.stop="onClickBtn"
+    ></v-app-bar-nav-icon>
+
+    <div class="v-toolbar-title">
       <v-toolbar-title class="font-weight-light white--text">
-        <v-btn
-          v-if="responsive"
-          class="v-btn--simple"
-          icon
-          @click.stop="onClickBtn"
-        >
-          <v-icon>mdi-view-list</v-icon>
-        </v-btn>
         {{ title }}
       </v-toolbar-title>
     </div>
@@ -18,28 +14,9 @@
     <v-spacer />
     <v-toolbar-items>
       <v-flex align-center layout py-2>
-        <router-link v-ripple class="toolbar-items" to="/">
-          <v-icon color>mdi-home</v-icon>
-        </router-link>
-        <v-menu
-          bottom
-          left
-          content-class
-          offset-y
-          transition="slide-y-transition"
-        >
-        </v-menu>
-        <router-link
-          v-ripple
-          class="toolbar-items"
-          to="/dashboard/user-profile"
-        >
-          <v-icon color>mdi-account</v-icon>
-        </router-link>
-
         <v-icon class="toolbar-items" color>mdi-power</v-icon>
       </v-flex>
-    </v-toolbar-items> -->
+    </v-toolbar-items>
   </v-app-bar>
 </template>
 
@@ -57,7 +34,7 @@ export default {
   watch: {
     $route(val) {
       console.log(val);
-      this.title = val.name;
+      this.title = val.meta.name;
     },
   },
   mounted() {

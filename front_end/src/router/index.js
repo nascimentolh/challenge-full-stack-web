@@ -1,35 +1,49 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from "vue";
+import VueRouter from "vue-router";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/dashboard',
-    name: 'About',
-    component: () => import(`@/views/DashboardView.vue`),
+    path: "/",
+    redirect: { name: "login" },
+    name: "loginhome",
+    component: () => import(`@/views/LoginHomeView.vue`),
     children: [
       {
-        path: '',
-        name: 'Dashboard',
-        component: () => import(`@/components/DashViews/Dashboard.vue`)
+        path: "login",
+        name: "login",
+        component: () => import(`@/components/LoginForm.vue`),
       },
+    ],
+  },
+  {
+    path: "/dashboard",
+    name: "dashboard",
+    component: () => import(`@/views/DashboardView.vue`),
+    meta: {
+      name: "Dashboard",
+      rule: "isPublic",
+    },
+    children: [
       {
-        path: "/students",
+        path: "students",
         meta: {
-          name: 'Estudantes',
+          name: "Estudantes",
+          rule: "isAdmin",
         },
-        name: "Estudantes",
-        component: () => import(`@/components/DashViews/Student.vue`)
-      }
-    ]
-  }
-]
+        name: "students",
+        component: () => import(`@/components/DashViews/Student.vue`),
+      },
+    ],
+  },
+  { path: "_=_", redirect: "/" },
+];
 
 const router = new VueRouter({
-  mode: 'history',
-  base: "/control",
-  routes
-})
+  mode: "history",
+  base: "/",
+  routes,
+});
 
-export default router
+export default router;
