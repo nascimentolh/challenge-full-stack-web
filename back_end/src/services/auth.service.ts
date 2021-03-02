@@ -27,4 +27,5 @@ const login = async (data: ILogin) => {
 
 export default {
   login,
+  getUserByEmail,
 };
