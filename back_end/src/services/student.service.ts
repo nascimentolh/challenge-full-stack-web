@@ -7,14 +7,11 @@ import { User } from '../entities/user/user.entity';
 
 const createStudent = async (data: IStudentCreateDTO) => {
   const password = data.cpf.slice(0, 6);
-
   const user = await userService.create({
     email: data.email,
     name: data.name,
     password,
   });
-
-  console.log(user);
 
   const newStudent = new Student();
   newStudent.cpf = data.cpf;

@@ -1,5 +1,5 @@
 import UserService from './user.service';
-import { mockQueryBuilder, mockRepository } from '../tests/unit/dbMock';
+import { mockRepository } from '../tests/unit/dbMock';
 import * as typeorm from 'typeorm';
 import { User } from '../entities/user/user.entity';
 

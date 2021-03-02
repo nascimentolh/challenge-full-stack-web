@@ -15,7 +15,6 @@ const getUserByEmail = async (email: string) => {
 
 const login = async (data: ILogin) => {
   const user = await getUserByEmail(data.email);
-  console.log(user);
   if (user) {
     if (await verifyPass(data.password, user.password)) {
       user.lastAccess = new Date().toISOString();
