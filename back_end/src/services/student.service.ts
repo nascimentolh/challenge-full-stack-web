@@ -45,9 +45,7 @@ const getStudents = async () => {
       .select(['student', 'user.name', 'user.email', 'user.id'])
       .leftJoin('student.user', 'user')
       .paginate();
-  } catch (error) {
-    return null;
-  }
+  } catch (error) {}
 };
 
 const getStudentByRA = async (studentRA: number) => {

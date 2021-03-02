@@ -27,6 +27,11 @@ const create: IController = async (
   }
 };
 
+const getUsers: IController = async (req, res) => {
+  const users = await userService.getUsers();
+  apiResponse.result(res, users, httpStatusCodes.OK);
+};
+
 const getUserByEmail: IController = async (req, res) => {
   const user = await userService.getUserByEmail(req.params.email);
   apiResponse.result(res, user, httpStatusCodes.OK);
@@ -50,6 +55,7 @@ const updateByStudent: IController = async (req, res) => {
 
 export default {
   create,
+  getUsers,
   getUserByEmail,
   updateByStudent,
 };

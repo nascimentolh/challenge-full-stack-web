@@ -16,6 +16,15 @@ const create = async (data: IUserCreateDTO) => {
   return await getRepository(User).save(newUser);
 };
 
+const getUsers = async () => {
+  try {
+    return await getRepository(User)
+      .createQueryBuilder('user')
+      .select(['user.name', 'user.email', 'user.isStaff'])
+      .getMany();
+  } catch (error) {}
+};
+
 const getUserByEmail = async (email: string) => {
   try {
     return sanitizeUser(await getRepository(User).findOne({ email }));
@@ -43,6 +52,7 @@ const updateUser = async (user: User) => {
 
 export default {
   create,
+  getUsers,
   getUserByEmail,
   updateByStudent,
   updateUser,
