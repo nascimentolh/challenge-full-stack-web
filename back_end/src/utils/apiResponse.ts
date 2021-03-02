@@ -19,6 +19,7 @@ export default class ApiResponse {
     override: IOverrideRequest = null,
   ) => {
     res.status(status).json({
+      override,
       error: {
         message: error,
       },
