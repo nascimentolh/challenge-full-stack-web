@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --collectCoverage",
+    "build": "tsc",
+    "start": "yarn serve",
+    "serve": "node dist/index.js",
     "watch-node": "nodemon",
     "watch-ts": "tsc -w",
     "migration:generate": "ts-node ./node_modules/.bin/typeorm migration:generate",
