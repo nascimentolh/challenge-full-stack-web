@@ -4,7 +4,6 @@ import {
   IUserUpdateByStudentDTO,
 } from './interfaces/IUsersService';
 import { generatePass } from '../utils/crypto';
-import { sanitizeUser } from '../utils/api';
 import { getRepository } from 'typeorm';
 
 const create = async (data: IUserCreateDTO) => {
@@ -17,20 +16,14 @@ const create = async (data: IUserCreateDTO) => {
 };
 
 const getUsers = async () => {
-  try {
-    return await getRepository(User)
-      .createQueryBuilder('user')
-      .select(['user.name', 'user.email', 'user.isStaff'])
-      .getMany();
-  } catch (error) {}
+  return await getRepository(User)
+    .createQueryBuilder('user')
+    .select(['user.id', 'user.name', 'user.email', 'user.isStaff'])
+    .getMany();
 };
 
 const getUserByEmail = async (email: string) => {
-  try {
-    return sanitizeUser(await getRepository(User).findOne({ email }));
-  } catch (error) {
-    return null;
-  }
+  return await getRepository(User).findOne({ email });
 };
 
 const updateByStudent = async (

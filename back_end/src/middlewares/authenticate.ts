@@ -3,8 +3,9 @@ import IRequest from 'IRequest';
 import apiResponse from '../utils/apiResponse';
 import httpStatusCodes from 'http-status-codes';
 import { verifyToken } from '../utils/crypto';
-import userService from '../services/user.service';
+import authService from '../services/auth.service';
 import { IDecodedUser } from '../utils/interfaces/ICrypto';
+import { sanitizeUser } from '../utils/api';
 
 export default async (
   req: IRequest,
@@ -12,12 +13,13 @@ export default async (
   next: NextFunction,
 ) => {
   const authorizationHeader = req.headers.authorization;
-
   if (authorizationHeader) {
     const [_, token] = authorizationHeader.split(' ');
     const decoded: IDecodedUser | null = await verifyToken(token);
     if (decoded) {
-      const user = await userService.getUserByEmail(decoded.email);
+      const user = sanitizeUser(
+        await authService.getUserByEmail(decoded.email),
+      );
       if (user) {
         // @ts-ignore
         req.user = user;

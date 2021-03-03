@@ -18,8 +18,7 @@ describe('User Service', () => {
     expect(now.id).toBe(1);
     expect(now.name).toBe('Tony Stark');
     expect(now.email).toBe('tony@starkindustries.com');
-    //@ts-ignore
-    expect(now.password).toBe(undefined);
+    expect(now.password).toBe('pepperPotts@');
     expect(typeorm.getRepository(User).findOne).toHaveBeenCalledTimes(
       1,
     );
@@ -31,16 +30,14 @@ describe('User Service', () => {
   test('getUserByEmail with non-existing user', async () => {
     //@ts-ignore
     typeorm.getRepository = jest.fn().mockReturnValue({
-      findOne: jest.fn().mockImplementation(() => {
-        throw new Error();
-      }),
+      findOne: jest.fn().mockImplementation(() => {}),
     });
 
     const now = await UserService.getUserByEmail(
       'tony@starkindustries.com',
     );
 
-    expect(now).toBe(null);
+    expect(now).toBe(undefined);
     expect(typeorm.getRepository(User).findOne).toHaveBeenCalledTimes(
       1,
     );
