@@ -17,7 +17,7 @@ const login: IController = async (
     apiResponse.result(
       res,
       { ...user, ...{ token } },
-      httpStatusCodes.OK,
+      httpStatusCodes.CREATED,
     );
   } else {
     apiResponse.error(
