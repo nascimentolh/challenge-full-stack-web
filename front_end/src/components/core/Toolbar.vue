@@ -14,7 +14,7 @@
     <v-spacer />
     <v-toolbar-items>
       <v-flex align-center layout py-2>
-        <v-icon class="toolbar-items" color>mdi-power</v-icon>
+        <v-icon class="toolbar-items" color @click="logout">mdi-power</v-icon>
       </v-flex>
     </v-toolbar-items>
   </v-app-bar>
@@ -60,6 +60,11 @@ export default {
         this.responsive = false;
         this.responsiveInput = true;
       }
+    },
+    logout: function () {
+      this.$store.dispatch("logout").then(() => {
+        this.$router.push("/");
+      });
     },
   },
 };

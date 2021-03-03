@@ -62,7 +62,7 @@ export default {
         can: "admin",
       },
       {
-        to: "users",
+        to: "/dashboard/users",
         icon: "mdi-account",
         text: "Usuários",
         can: "admin",

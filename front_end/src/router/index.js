@@ -35,6 +35,15 @@ const routes = [
         name: "students",
         component: () => import(`@/components/DashViews/Student.vue`),
       },
+      {
+        path: "users",
+        meta: {
+          name: "Usuarios",
+          rule: "isAdmin",
+        },
+        name: "users",
+        component: () => import(`@/components/DashViews/Users.vue`),
+      },
     ],
   },
   { path: "_=_", redirect: "/" },

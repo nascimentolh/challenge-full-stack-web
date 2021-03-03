@@ -29,6 +29,7 @@ export default {
   logout({ commit }) {
     return new Promise((resolve) => {
       commit("logout");
+      commit("setUser", {});
       localStorage.removeItem("@GRUPOA_USER_TOKEN");
       delete axios.defaults.headers.common["Authorization"];
       resolve();
