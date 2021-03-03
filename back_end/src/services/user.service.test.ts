@@ -1,7 +1,7 @@
 import UserService from './user.service';
 import { mockRepository } from '../tests/unit/dbMock';
 import * as typeorm from 'typeorm';
-import { User } from '../entities/user/user.entity';
+import { User } from '../database/entities/user/user.entity';
 
 describe('User Service', () => {
   test('getUserByEmail with existing user', async () => {

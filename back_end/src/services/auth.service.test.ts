@@ -1,7 +1,7 @@
 import AuthService from './auth.service';
 import { mockRepository } from '../tests/unit/dbMock';
 import * as typeorm from 'typeorm';
-import { User } from '../entities/user/user.entity';
+import { User } from '../database/entities/user/user.entity';
 import { verifyPass } from '../utils/crypto';
 
 describe('Auth Service', () => {

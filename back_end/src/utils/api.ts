@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import IRequest from 'IRequest';
-import { Student } from '../entities/user/student.entity';
-import { User } from '../entities/user/user.entity';
+import { Student } from '../database/entities/user/student.entity';
+import { User } from '../database/entities/user/user.entity';
 import httpStatusCodes from 'http-status-codes';
 import apiResponse from './apiResponse';
 

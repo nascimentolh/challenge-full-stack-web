@@ -11,9 +11,9 @@ module.exports = {
     // '**/**.entity.js'
   ],
   logging: process.env.NODE_ENV !== 'production' ? 'all' : 'error',
-  migrations: ['migration/*.ts'],
+  migrations: ['src/database/migration/*.ts'],
   cli: {
-    migrationsDir: 'migration',
+    migrationsDir: 'src/database/migration',
   },
   connectTimeout: 30000,
   acquireTimeout: 30000,

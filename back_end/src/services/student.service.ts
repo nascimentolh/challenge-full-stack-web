@@ -1,9 +1,9 @@
 import { getRepository } from 'typeorm';
-import { Student } from '../entities/user/student.entity';
+import { Student } from '../database/entities/user/student.entity';
 import { IStudentCreateDTO } from './interfaces/IStudentsService';
 import userService from './user.service';
 import { sanitizeStudent } from '../utils/api';
-import { User } from '../entities/user/user.entity';
+import { User } from '../database/entities/user/user.entity';
 
 const createStudent = async (data: IStudentCreateDTO) => {
   const password = data.cpf.slice(0, 6);

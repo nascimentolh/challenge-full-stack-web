@@ -1,4 +1,4 @@
-import { User } from '../entities/user/user.entity';
+import { User } from '../database/entities/user/user.entity';
 import {
   IUserCreateDTO,
   IUserUpdateByStudentDTO,

@@ -3,7 +3,7 @@ import apiResponse from '../utils/apiResponse';
 
 import httpStatusCodes from 'http-status-codes';
 import IController from 'IController';
-import { sanitizeStudent, sanitizeUser } from '../utils/api';
+import { sanitizeUser } from '../utils/api';
 import { ValidatedRequest } from 'express-joi-validation';
 import { ICreateUserSchema } from './interfaces/IUser';
 import constants from '../constants';

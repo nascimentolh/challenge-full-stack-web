@@ -1,8 +1,7 @@
 import StudentService from './student.service';
 import { mockRepository } from '../tests/unit/dbMock';
 import * as typeorm from 'typeorm';
-import { Student } from '../entities/user/student.entity';
-import { User } from '../entities/user/user.entity';
+import { Student } from '../database/entities/user/student.entity';
 
 describe('Student Service', () => {
   test('getStudentByCpf with existing student', async () => {

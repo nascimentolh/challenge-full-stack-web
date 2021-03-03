@@ -3,7 +3,6 @@ import routes from './auth.route';
 import app from '../../config/express';
 import { verifyToken } from '../../utils/crypto';
 import authService from '../../services/auth.service';
-import studentService from '../../services/student.service';
 
 describe('Test Auth Routes', () => {
   it('POST /api/auth - Authenticate user with valid body', (done: CallbackHandler) => {
