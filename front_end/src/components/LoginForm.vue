@@ -13,16 +13,16 @@
                 <v-text-field
                   ref="username"
                   v-model="email"
-                  :rules="[() => !!email || 'This field is required']"
+                  :rules="[() => !!email || 'Email é requerido']"
                   prepend-icon="mdi-account"
-                  label="email"
+                  label="Email"
                   placeholder="your@domain.com"
                   required
                 />
                 <v-text-field
                   ref="password"
                   v-model="password"
-                  :rules="[() => !!password || 'This field is required']"
+                  :rules="[() => !!password || 'Senha é requerido']"
                   :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
                   :type="showPassword ? 'text' : 'password'"
                   prepend-icon="mdi-lock"
@@ -50,7 +50,7 @@
             </v-card-actions>
             <v-snackbar v-model="snackbar" color="white red--text" :top="true">
               {{ errorMessages }}
-              <v-btn dark flat @click="snackbar = false"> Fechar </v-btn>
+              <v-btn dark @click="snackbar = false"> Fechar </v-btn>
             </v-snackbar>
           </v-card>
         </v-flex>
@@ -63,7 +63,7 @@
 export default {
   data: function () {
     return {
-      username: "",
+      email: "",
       password: "",
       errorMessages: "As informações de login não conferem",
       snackbar: false,

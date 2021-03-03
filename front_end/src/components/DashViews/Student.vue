@@ -247,7 +247,7 @@ export default {
       const errors = [];
       if (!this.$v.student.email.$dirty) return errors;
       !this.$v.student.email.email &&
-        errors.push("RA deve ser um e-mail válido");
+        errors.push("Email deve ser um e-mail válido");
       !this.$v.student.email.required && errors.push("Email é requerido");
       return errors;
     },
